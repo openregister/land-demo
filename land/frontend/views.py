@@ -17,8 +17,8 @@ from openregister.stores.mongodb import MongoStore
 mongo_host = os.getenv('DB_PORT_27017_TCP_ADDR', '127.0.0.1')
 mongo_uri = 'mongodb://%s:27017/landregistry' % mongo_host
 
-# load register register
 land_title_store = MongoStore(mongo_uri, prefix="land_title_")
+land_title_clause_store = MongoStore(mongo_uri, prefix="land_title_clause_")
 
 
 from land.frontend.forms import SearchForm
@@ -33,4 +33,5 @@ def index():
 @frontend.route('/land/title/<number>', methods=['GET'])
 def register_view(number):
     meta, land_title = land_title_store.find(query={'land-title': number})
-    return render_template('register_view.html', land_title=land_title[0])
+    meta, clauses = land_title_clause_store.find(query={'land-title': number})
+    return render_template('register_view.html', land_title=land_title[0], clauses=clauses)

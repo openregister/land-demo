@@ -9,6 +9,15 @@
         <dd><a href="http://address.openregister.org/address/{{ land_title['address']}}">ADDRESS!</a></dd>
       </dl>
 
+      {% for clause in clauses %}
+      <div>
+      <h2> Section: {{ clause['land-title-section'] }} </h2>
+      <h2> Clause: {{ clause['land-title-clause'] }} </h2>
+      <p> <code>{{ clause['text'] }}</code> </p>
+      <p> Deed: {{ clause['land-deed'] }} </p>
+      </div>
+      {% endfor %}
+
       </div>
     </div>
 {% endblock %}
