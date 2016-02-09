@@ -15,7 +15,7 @@ flake8:
 	flake8 land tests manage.py
 
 server:
-	./manage.py server
+	./run.sh
 
 load:
 	bin/loader.py
