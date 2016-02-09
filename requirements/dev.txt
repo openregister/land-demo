@@ -1,0 +1,6 @@
+# install all prod requirements as well as those listed in this file
+-r prod.txt
+
+pytest
+Flask-Script
+flake8
