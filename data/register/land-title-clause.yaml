@@ -2,7 +2,6 @@ fields:
 - land-title-clause
 - land-title
 - text
-- address
 - start-date
 - end-date
 phase: alpha
