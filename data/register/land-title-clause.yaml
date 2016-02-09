@@ -1,0 +1,11 @@
+fields:
+- land-title-clause
+- land-title
+- text
+- address
+- start-date
+- end-date
+phase: alpha
+register: land-title-clause
+registry: land-registry
+text: 'Land title in England and Wales'

@@ -1,0 +1,12 @@
+fields:
+- land-owner
+- name
+- start-date
+- end-date
+- date-of-birth
+- address
+- email
+phase: alpha
+register: land-owner
+registry: land-registry
+text: 'Land owner in England and Wales'

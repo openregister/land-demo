@@ -17,8 +17,8 @@ flake8:
 server:
 	./manage.py server
 
-dist:
-	python3 setup.py sdist upload
+load:
+	bin/loader.py
 
 init:
 	pip3 install -r requirements/dev.txt
