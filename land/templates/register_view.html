@@ -42,8 +42,7 @@
         <p class="intro">{{ section.intro }}</p>
         {% for clause in section.clauses %}
         <div class="clause">
-        <p id='{{ clause['land-title-clause'] }}' class="clause-text"> {{ clause['text'] }} 
-          {% if clause['land-deed'] %}<a class="deed-ref" href="" title="taken from deed {{ clause['land-deed']}}">§</a> {% endif %}
+        <p id='{{ clause['land-title-clause'] }}'><pre class="clause-text">{{ clause['text'] }}</pre> {% if clause['land-deed'] %}<a class="deed-ref" href="" title="taken from deed {{ clause['land-deed']}}">§</a> {% endif %}
           <a class="pilcrow" href="#{{ clause['land-title-clause'] }}">¶</a>
           </p>
         </div>
@@ -53,4 +52,21 @@
 
       </div>
     </div>
+{% endblock %}
+{% block body_end %}
+<script src="{{asset_path}}javascripts/vendor/jquery.js"></script>
+<script>
+$(function() {
+  $('.clause-text').each(function () {
+    var clause = $(this);
+    var html = clause.html();
+    html = html.replace(/\n/g, '<br>')
+    html = html.replace(/(Charges Register)/g, '<a href="#CHARGES">$1</a>')
+    html = html.replace(/\[\[land-title:([[A-Z0-9]*\]\])/g, '<code><a href="/land/title/$1" class="title-ref">$1</a></code>');
+    html = html.replace(/\[\[company:([[A-Z0-9]*)\]\]/g, '<code><a href="https://beta.companieshouse.gov.uk/company/$1" class="company-ref">company:$1</a></code>');
+    html = html.replace(/\[\[address:([[A-Z0-9]*)\]\]/g, '<code><a href="http://address.openregister.org/address/$1" class="address-ref">address:$1</a></code>');
+    clause.html(html);
+  });
+});
+</script>
 {% endblock %}

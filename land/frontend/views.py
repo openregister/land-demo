@@ -64,6 +64,7 @@ def register_view(number):
     }
 
     for clause in clauses:
+        clause['text'] = clause['text'].strip()
         sections[clause['land-title-section']]['clauses'].append(clause)
 
     address = client.item('address', land_title['address'])
