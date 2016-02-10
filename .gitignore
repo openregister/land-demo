@@ -58,3 +58,4 @@ target/
 .DS_Store
 demodata/
 *.swp
+bower_components
