@@ -1,2 +1,6 @@
-company	name	company-status	registered-office	industry	start-date	end-date
-05029336	active	100090667637	56101	2004-01-29	
+company	name	company-status	registered-office	industry	start-date	end-date	company-type
+01854767	CHIQUITO LIMITED	active	200003356517	56101	1984-10-11		Private limited Company
+04301197	LEGAL & GENERAL LEISURE FUND TRUSTEE LIMITED	active	95506023	74990	2001-10-09		Private limited Company
+04452915	LEGAL & GENERAL PROPERTY PARTNERS (LEISURE) LIMITED	active	95506023	41100	2002-05-31		Private limited Company
+00166055	LEGAL AND GENERAL ASSURANCE SOCIETY LIMITED	active	95506023	65110	1920-04-01		Private limited Company
+03187865	PLYMOUTH LEISURE CORPORATION LIMITED	active	100062352568	9305	1996-04-18		Private limited Company

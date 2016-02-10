@@ -57,8 +57,12 @@
 <script src="{{asset_path}}javascripts/vendor/jquery.js"></script>
 <script>
 
-// need a register javascript client library!
-var records = {};
+var records = {
+{% set comma = joiner(",") %}
+{% for record in records %}
+{{ comma() }}'{{ record }}': { item: {{ records[record]|safe }}, url: ''}
+{% endfor %}};
+
 function get_record(curie, callback) {
   if (records[curie]) {
     callback(records[curie]);
@@ -74,12 +78,10 @@ function get_record(curie, callback) {
 
 
 function replace_addresses(html) {
-  console.log("replace_addresses", html);
   return html.replace(/\[\[address:[A-Z0-9]*\]\]/g, function(curie) {
     curie = curie.replace(/[\[\]]/g, '')
     var url = records[curie].url;
     var address = records[curie].item;
-    console.log(address);
     var text = address.property +
       ' ' + address.street +
       ' ' + address.locality +
@@ -91,6 +93,16 @@ function replace_addresses(html) {
   });
 }
 
+function replace_companies(html) {
+  return html.replace(/\[\[company:[0-9]*\]\]/g, function(curie) {
+    curie = curie.replace(/[\[\]]/g, '');
+    var c = curie.split(":")
+    var url = 'https://beta.companieshouse.gov.uk/company/' + c[1];
+    var company = records[curie].item;
+    var text = company.name;
+    return '<a href="' + url+ '" title="' + curie +'" class="company-ref">' + text + '</a>'
+  });
+}
 
 $(function() {
   $('.clause-text').each(function () {
@@ -99,7 +111,8 @@ $(function() {
     html = html.replace(/\n/g, '<br>')
     html = html.replace(/(Charges Register)/g, '<a href="#CHARGES">$1</a>')
     html = html.replace(/\[\[land-title:([[A-Z0-9]*)\]\]/g, '<a href="/land/title/$1" class="title-ref">$1</a>');
-    html = html.replace(/\[\[company:([[A-Z0-9]*)\]\]/g, '<a href="https://beta.companieshouse.gov.uk/company/$1" class="company-ref">company:$1</a>');
+
+    html = replace_companies(html);
 
     var addresses = html.match(/\[\[address:[A-Z0-9]*\]\]/g);
     if (!addresses) {
