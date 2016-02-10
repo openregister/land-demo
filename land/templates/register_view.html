@@ -1,24 +1,37 @@
 {% extends "govuk_template.html" %}
 {% block content %}
-    <div class="grid-row">
+    <div class="grid-row land-title">
       <div class="column-two-thirds">
-      <h1>{{ land_title['land-title'] }}</h1>
+      <h1 class="heading-xlarge">
+        <span class="heading-secondary">Land Title</span>
+        {{ land_title['land-title'] }}
+      </h1>
 
-      <dl>
-        <dt>Address</dt>
-        <dd><a href="http://address.openregister.org/address/{{ land_title['address']}}">ADDRESS!</a></dd>
-      </dl>
+      <h3 class='heading-medium'><a href="http://address.openregister.org/address/{{ land_title['address']}}">Address</a></h3>
+      <ul>
+        <li>{{ address['property'] }}</a></li>
+        <li>{{ address['street'] }}</a></li>
+        <li>{{ address['town'] }}</a></li>
+        <li>{{ address['postcode'] }}</a></li>
+      </ul>
+      </div>
 
-      {% for clause in clauses %}
-      <div>
-      <h2> Section: {{ clause['land-title-section'] }} </h2>
-      <h2> Clause: {{ clause['land-title-clause'] }} </h2>
-      <p> <code>{{ clause['text'] }}</code> </p>
-      <p> Deed: {{ clause['land-deed'] }} </p>
+      {% for section_id in section_order %}
+      {% set section = sections[section_id] %}
+      <div class="column-two-thirds section">
+      <h2 class='heading-large section' id="{{ section_id }}"><a href="#{{ section_id }}">{{ section.name }}.</a> {{ section.title }} </h2>
+        <p class="intro">{{ section.intro }}</p>
+        {% for clause in section.clauses %}
+        <div class="clause">
+        <p id='{{ clause['land-title-clause'] }}' class="clause-text"> {{ clause['text'] }} 
+          {% if clause['land-deed'] %}<a class="deed-ref" href="" title="taken from deed {{ clause['land-deed']}}">§</a> {% endif %}
+          <a class="pilcrow" href="#{{ clause['land-title-clause'] }}">¶</a>
+          </p>
+        </div>
+        {% endfor %}
       </div>
       {% endfor %}
 
       </div>
     </div>
 {% endblock %}
-

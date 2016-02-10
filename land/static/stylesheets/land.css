@@ -1,0 +1,19 @@
+.clause-text {
+  font-family: "Courier New";
+}
+
+.pilcrow,
+.deed-ref {
+  text-decoration:none;
+  font-weight: normal;
+}
+
+h2.section a {
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+}
+
+.land-title a:visited {
+  color: #005ea5;
+}
