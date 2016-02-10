@@ -24,3 +24,9 @@ h2.section a {
 .land-title a:visited {
   color: #005ea5;
 }
+
+.map-canvas {
+  width:100%;
+  margin: 1em 0;
+  height: 300px !important;
+}

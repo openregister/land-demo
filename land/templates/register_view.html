@@ -20,7 +20,7 @@
       <h2 class='heading-large'>About this land title</h2>
       <p>
       The following extract contains information taken from registers associated with the title
-      number <code>{{ land_title['land-title']}}</code>. 
+      number <a href="">{{ land_title['land-title']}}</a>. 
       </p>
       <p>
       Neither this extract nor the full copy is an 'Official Copy' of the register. An
@@ -29,7 +29,7 @@
       suffers loss by reason of a mistake in an official copy.
       </p>
       <p>
-      This extract shows information current on <code>23 OCT 2015 at 12:14:45</code> and so does not take
+      This extract shows information current on <time datetime="2015-10-23T12:14:45Z">23 OCT 2015 at 12:14:45</time> and so does not take
       account of any application made after that time even if pending in the Land Registry
       when this extract was issued.
       </p>
@@ -56,16 +56,66 @@
 {% block body_end %}
 <script src="{{asset_path}}javascripts/vendor/jquery.js"></script>
 <script>
+
+// need a register javascript client library!
+var records = {};
+function get_record(curie, callback) {
+  if (records[curie]) {
+    callback(records[curie]);
+  } else {
+    var c = curie.split(":")
+    var url = "http://" + c[0] + ".openregister.org/" + c[0] + "/" + c[1];
+    $.getJSON(url + ".json", function(data) {
+      records[curie] = {item: data.entry, url: url}
+      callback(records[curie]);
+    });
+  }
+}
+
+
+function replace_addresses(html) {
+  console.log("replace_addresses", html);
+  return html.replace(/\[\[address:[A-Z0-9]*\]\]/g, function(curie) {
+    curie = curie.replace(/[\[\]]/g, '')
+    var url = records[curie].url;
+    var address = records[curie].item;
+    console.log(address);
+    var text = address.property +
+      ' ' + address.street +
+      ' ' + address.locality +
+      ' ' + address.area +
+      ' ' + address.town +
+      ' ' + address.postcode;
+      text = text.trim().replace(/  */g, ' ');
+    return '<a href="' + url+ '" title="' + curie +'" class="address-ref">' + text + '</a>'
+  });
+}
+
+
 $(function() {
   $('.clause-text').each(function () {
     var clause = $(this);
     var html = clause.html();
     html = html.replace(/\n/g, '<br>')
     html = html.replace(/(Charges Register)/g, '<a href="#CHARGES">$1</a>')
-    html = html.replace(/\[\[land-title:([[A-Z0-9]*\]\])/g, '<code><a href="/land/title/$1" class="title-ref">$1</a></code>');
-    html = html.replace(/\[\[company:([[A-Z0-9]*)\]\]/g, '<code><a href="https://beta.companieshouse.gov.uk/company/$1" class="company-ref">company:$1</a></code>');
-    html = html.replace(/\[\[address:([[A-Z0-9]*)\]\]/g, '<code><a href="http://address.openregister.org/address/$1" class="address-ref">address:$1</a></code>');
-    clause.html(html);
+    html = html.replace(/\[\[land-title:([[A-Z0-9]*)\]\]/g, '<a href="/land/title/$1" class="title-ref">$1</a>');
+    html = html.replace(/\[\[company:([[A-Z0-9]*)\]\]/g, '<a href="https://beta.companieshouse.gov.uk/company/$1" class="company-ref">company:$1</a>');
+
+    var addresses = html.match(/\[\[address:[A-Z0-9]*\]\]/g);
+    if (!addresses) {
+      clause.html(html);
+    } else {
+      var counter = addresses.length;
+      addresses.forEach(function(curie, index) {
+        curie = curie.replace(/[\[\]]/g, '')
+        get_record(curie, function() {
+          if (--counter == 0) {
+            html = replace_addresses(html);
+            clause.html(html);
+          }
+        });
+      });
+    }
   });
 });
 </script>
